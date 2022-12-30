@@ -10,7 +10,7 @@ use std::thread::sleep;
 const STAR1: &str = r"★≡≡≡≡≡≡";
 const STAR2: &str = r"☆≡≡≡≡≡≡";
 const STAR_COUNT: usize = 30;
-const STAR_PERCENT: f32 = 0.05;
+const STAR_PERCENT: f32 = 0.01;
 const DURATION: u64 = 50;
 
 #[derive(Clone, Copy)]
@@ -61,6 +61,7 @@ fn generate_frame(appears: &Vec<StarAppearance>, term_col: isize, term_row: isiz
             ap
         })
         .filter(|ap| ap.col < term_col)
+        .filter(|ap| ap.col + ap.star.chars().count() as isize >= 0)
         .into_group_map_by(|ap| ap.row);
         
     (0..term_row).map(|idx| shifted.get(&idx)).map(|row| {
@@ -85,21 +86,14 @@ fn generate_frame(appears: &Vec<StarAppearance>, term_col: isize, term_row: isiz
 }
 
 fn is_end(appears: &Vec<StarAppearance>, head_col: isize) -> bool {
-    let stars = [STAR1, STAR2];
-    let mut max_len = 0;
-    for s in stars.map(|s| s.chars().count()) {
-        max_len = usize::max(s, max_len);
-    }
-
     appears.iter()
-        .map(|a| a.col)
-        .map(|c| c + head_col + max_len as isize)
+        .map(|a| a.col + a.star.chars().count() as isize)
+        .map(|c| c + head_col)
         .all(|c| c < 0)
 }
 
 fn main() {
-    // let hide_cursor = cursor::HideCursor::from(stdout());
-    // print!("{}", cursor::Hide);
+    let _hide_cursor = cursor::HideCursor::from(stdout());
 
     if let Ok((cols, rows)) = termion::terminal_size() {
         let appears = initialize(rows as usize);
