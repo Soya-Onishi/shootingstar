@@ -107,6 +107,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "shooting-star"
+version = "0.1.0"
+dependencies = [
+ "itertools",
+ "rand",
+ "termion",
+]
+
+[[package]]
 name = "termion"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -116,15 +125,6 @@ dependencies = [
  "numtoa",
  "redox_syscall",
  "redox_termios",
-]
-
-[[package]]
-name = "train"
-version = "0.1.0"
-dependencies = [
- "itertools",
- "rand",
- "termion",
 ]
 
 [[package]]
